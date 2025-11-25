@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
-import { Plus, Edit, Trash2, LogOut } from 'lucide-react';
+import { Plus, Edit, Trash2, LogOut, X } from 'lucide-react';
 import ItemModal from './ItemModal';
 import API_BASE_URL from '../config/api';
 
@@ -12,6 +12,8 @@ const Dashboard = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [currentItem, setCurrentItem] = useState(null);
     const [loading, setLoading] = useState(true);
+
+    const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
     useEffect(() => {
         fetchItems();
@@ -65,18 +67,46 @@ const Dashboard = () => {
     if (loading) return <div className="p-8">Loading...</div>;
 
     return (
-        <div className="min-h-screen bg-gray-100 flex">
+        <div className="min-h-screen bg-gray-100 flex flex-col md:flex-row">
+            {/* Mobile Header */}
+            <div className="md:hidden bg-white p-4 shadow-sm flex justify-between items-center">
+                <h1 className="text-xl font-bold text-blue-600">InventoryPro</h1>
+                <button onClick={() => setIsSidebarOpen(!isSidebarOpen)} className="text-gray-600">
+                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                    </svg>
+                </button>
+            </div>
+
+            {/* Sidebar Overlay */}
+            {isSidebarOpen && (
+                <div
+                    className="fixed inset-0 bg-black bg-opacity-50 z-20 md:hidden"
+                    onClick={() => setIsSidebarOpen(false)}
+                ></div>
+            )}
+
             {/* Sidebar */}
-            <div className="w-64 bg-white shadow-md">
-                <div className="p-6">
+            <div className={`
+                fixed md:static inset-y-0 left-0 z-30 w-64 bg-white shadow-md transform transition-transform duration-200 ease-in-out
+                ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'}
+                md:translate-x-0
+            `}>
+                <div className="p-6 hidden md:block">
                     <h1 className="text-2xl font-bold text-blue-600">InventoryPro</h1>
                 </div>
-                <nav className="mt-6">
+                <div className="p-6 md:hidden flex justify-between items-center">
+                    <h1 className="text-2xl font-bold text-blue-600">Menu</h1>
+                    <button onClick={() => setIsSidebarOpen(false)}>
+                        <X size={24} />
+                    </button>
+                </div>
+                <nav className="mt-2 md:mt-6">
                     <a href="#" className="block py-2.5 px-4 rounded transition duration-200 bg-blue-50 text-blue-700 border-r-4 border-blue-700">
                         Dashboard
                     </a>
                 </nav>
-                <div className="absolute bottom-0 w-64 p-4">
+                <div className="absolute bottom-0 w-64 p-4 bg-white border-t md:border-t-0">
                     <div className="flex items-center gap-2 mb-4">
                         <div className="w-8 h-8 rounded-full bg-blue-500 flex items-center justify-center text-white font-bold">
                             {user?.username[0].toUpperCase()}
@@ -93,7 +123,7 @@ const Dashboard = () => {
             </div>
 
             {/* Main Content */}
-            <div className="flex-1 p-8">
+            <div className="flex-1 p-4 md:p-8 overflow-x-hidden">
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
                     <div className="bg-white p-6 rounded-lg shadow-sm">
                         <h3 className="text-gray-500 text-sm font-medium">Total Items</h3>
@@ -110,17 +140,17 @@ const Dashboard = () => {
                 </div>
 
                 <div className="bg-white rounded-lg shadow-sm overflow-hidden">
-                    <div className="p-6 border-b border-gray-200 flex justify-between items-center">
+                    <div className="p-6 border-b border-gray-200 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
                         <h2 className="text-xl font-bold text-gray-800">Inventory Items</h2>
                         <button
                             onClick={() => openModal()}
-                            className="bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center gap-2 hover:bg-blue-700 transition"
+                            className="w-full md:w-auto bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center justify-center gap-2 hover:bg-blue-700 transition"
                         >
                             <Plus size={18} /> Add Item
                         </button>
                     </div>
                     <div className="overflow-x-auto">
-                        <table className="w-full text-left border-collapse">
+                        <table className="w-full text-left border-collapse min-w-[800px] md:min-w-0">
                             <thead>
                                 <tr className="bg-gray-50">
                                     <th className="p-4 text-sm font-semibold text-gray-600">Name</th>

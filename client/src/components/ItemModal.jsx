@@ -37,7 +37,7 @@ const ItemModal = ({ isOpen, onClose, onSave, item }) => {
     if (!isOpen) return null;
 
     return (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
             <div className="bg-white rounded-lg p-6 w-full max-w-md">
                 <div className="flex justify-between items-center mb-4">
                     <h2 className="text-xl font-bold">{item ? 'Edit Item' : 'Add New Item'}</h2>
@@ -68,8 +68,8 @@ const ItemModal = ({ isOpen, onClose, onSave, item }) => {
                             required
                         />
                     </div>
-                    <div className="flex gap-4 mb-4">
-                        <div className="w-1/2">
+                    <div className="flex flex-col md:flex-row gap-4 mb-4">
+                        <div className="w-full md:w-1/2">
                             <label className="block text-gray-700 text-sm font-bold mb-2">Quantity</label>
                             <input
                                 type="number"
@@ -80,7 +80,7 @@ const ItemModal = ({ isOpen, onClose, onSave, item }) => {
                                 required
                             />
                         </div>
-                        <div className="w-1/2">
+                        <div className="w-full md:w-1/2">
                             <label className="block text-gray-700 text-sm font-bold mb-2">Price</label>
                             <input
                                 type="number"
