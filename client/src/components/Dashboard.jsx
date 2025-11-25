@@ -3,6 +3,8 @@ import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
 import { Plus, Edit, Trash2, LogOut } from 'lucide-react';
 import ItemModal from './ItemModal';
+import API_BASE_URL from '../config/api';
+
 
 const Dashboard = () => {
     const { user, logout } = useAuth();
@@ -17,7 +19,7 @@ const Dashboard = () => {
 
     const fetchItems = async () => {
         try {
-            const res = await axios.get('/api/items');
+            const res = await axios.get(`${API_BASE_URL}/api/items`);
             setItems(res.data);
         } catch (error) {
             console.error('Error fetching items:', error);
@@ -29,9 +31,9 @@ const Dashboard = () => {
     const handleSave = async (itemData) => {
         try {
             if (currentItem) {
-                await axios.put(`/api/items/${currentItem.id}`, itemData);
+                await axios.put(`${API_BASE_URL}/api/items/${currentItem.id}`, itemData);
             } else {
-                await axios.post('/api/items', itemData);
+                await axios.post(`${API_BASE_URL}/api/items`, itemData);
             }
             fetchItems();
             setIsModalOpen(false);
@@ -44,7 +46,7 @@ const Dashboard = () => {
     const handleDelete = async (id) => {
         if (window.confirm('Are you sure you want to delete this item?')) {
             try {
-                await axios.delete(`/api/items/${id}`);
+                await axios.delete(`${API_BASE_URL}/api/items/${id}`);
                 fetchItems();
             } catch (error) {
                 console.error('Error deleting item:', error);
