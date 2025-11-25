@@ -1,4 +1,4 @@
-// API Base URL - Railway Backend
-const API_BASE_URL = 'https://inventorypro-production.up.railway.app';
+// API Base URL - Render Backend
+const API_BASE_URL = 'https://inventorypro-backend.onrender.com';
 
 export default API_BASE_URL;
